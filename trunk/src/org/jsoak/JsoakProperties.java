@@ -44,8 +44,7 @@ public class JsoakProperties extends Properties
 
   private void loadNecessaryFiles(final List<String> testFileNames)
   {
-    final String[] necessaryFiles = this.getSpaceSeperatedString(this
-        .getProperty(NECESSARY_FILES));
+    final String[] necessaryFiles = this.getProperty(NECESSARY_FILES).split(" ");;
     testFileNames.addAll(Arrays.asList(necessaryFiles));
   }
 
@@ -77,19 +76,18 @@ public class JsoakProperties extends Properties
   {
     for (int i = 0; i < necessaryFiles.length; i++)
     {
-      necessaryFiles[i] = prefix + File.separator + necessaryFiles[i];
+      necessaryFiles[i] = prefix + "/" + necessaryFiles[i];
     }
     return necessaryFiles;
   }
 
   public String[] getBrowsers()
   {
-    return this.getSpaceSeperatedString(this.getProperty(BROWSERS));
+    return this.getProperty(BROWSERS).split(" ");
   }
-
-  private String[] getSpaceSeperatedString(String string)
+  public String getBrowserExecutable(String browser)
   {
-    return string.split(" ");
+    return this.getProperty(browser);
   }
 
   private static final String DEFAULT_PROPERTIES_LOCATION = "jsoak.properties";
