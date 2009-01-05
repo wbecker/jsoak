@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hiveshareWebApp" default="copyFiles" basedir=".">
+
+	<property name="projectsDir" value="/home/pretzel/docs/projects" />
+	<property name="jabsorbDir" value="${projectsDir}/jabsorb-trunk-unchanged" />
+	<property name="libs" value="WebContent/WEB-INF/lib" />
+	<property name="jsSrc" value="js_src" />
+	<property name="jsTests" value="js_tests" />
+	<property name="jsLibs" value="WebContent" />
+	<property name="jsTestLibs" value="WebContent/js_tests" />
+	<property name="portNumber" value="8011" />
+  <property name="src" value="src" />
+	<property name="build" value="build" />
+	<property name="build.classes" value="${build}/classes" />
+	<property name="jsoak-app-jar" value="build/jsoak.jar" />
+  <path id="classpath" description="This is used for building the jar">
+    <fileset dir="${jabsorbDir}/lib-ext">
+      <include name="*.jar" />
+    </fileset>
+    <pathelement path="${jabsorbDir}/build/jabsorb-trunk.jar" />
+  </path>
+	
+	<target name="copyFiles" description="Copies required libraries">
+		<!-- Build and copy jabsorb over -->
+		<ant antfile="${jabsorbDir}/build.xml" dir="${jabsorbDir}" target="dist" />
+		<ant antfile="${jabsorbDir}/build.xml" dir="${jabsorbDir}" target="copy-dependencies" />
+		<copy file="${jabsorbDir}/build/jabsorb-trunk.jar" todir="${libs}" overwrite="true" />
+		<copy file="${jabsorbDir}/lib/slf4j-api-1.4.2.jar" todir="${libs}" overwrite="true" />
+		<copy file="${jabsorbDir}/lib/slf4j-jdk14-1.4.2.jar" todir="${libs}" overwrite="true" />
+		
+    <copy file="${jsSrc}/console.js" todir="${jsLibs}" overwrite="true" />
+    <copy file="${jabsorbDir}/webapps/jsonrpc/jabsorb.js" todir="${jsLibs}" overwrite="true" />
+		<copy file="${jsSrc}/jsUnitCore.js" todir="${jsLibs}" overwrite="true" />
+		<copy file="${jsSrc}/JsUnitUtil.js" todir="${jsLibs}" overwrite="true" />
+		<copy file="${jsSrc}/JsUnitTest.js" todir="${jsLibs}" overwrite="true" />
+		<copy file="${jsSrc}/Jsoak.js" todir="${jsLibs}" overwrite="true" />
+		
+		<copy toDir="${jsTestLibs}" >
+		  <fileset dir="${jsTests}"></fileset>
+		</copy> 
+		<copy file="${jsSrc}/onloadHandler.js" todir="${jsLibs}" overwrite="true" />
+	</target>
+  
+	<target name="compile" description="Compiles the source into the build directory">
+    <mkdir dir="${build.classes}"/>
+    <javac debug="true" source="5" srcdir="${src}" destdir="${build.classes}">
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile" description="Puts the compiled source into a jar">
+    <jar destfile="${jsoak-app-jar}" basedir="${build.classes}" excludes="*~" />
+  </target>
+	
+	<target name="run" depends="copyFiles,compile" description="Runs jsoak">
+		<java classname="org.jsoak.JsoakRunner" fork="true" failonerror="true">
+			<arg value="${port-number}" />
+			<jvmarg value="-Djava.util.logging.config.file=testlogging.properties" />
+			<classpath>
+				<!--path refid="classpath" /-->
+        <path refid="classpath" />
+				<pathelement location="build/classes" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="clean" description="Cleans all files produced by ant">
+		  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
+		     <fileset dir="${jsTestLibs}" />
+		  </delete>
+		
+	    <delete file="${jsLibs}/console.js" />
+		  <delete file="${jsLibs}/jabsorb.js" />
+		  <delete file="${jsLibs}/jsUnitCore.js" />
+      <delete file="${jsLibs}/JsUnitUtil.js" />
+      <delete file="${jsLibs}/JsUnitTest.js" />
+      <delete file="${jsLibs}/Jsoak.js" />
+      <delete file="${jsLibs}/onloadHandler.js" />
+
+      <delete includeEmptyDirs="true" quiet="false" failonerror="false">
+	      <fileset dir="${build}" />
+	    </delete>
+	    
+	    <echo message="Done with clean!" />
+	  </target>
+</project>
