@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="hiveshareWebApp" default="copyFiles" basedir=".">
-  <property name="projectsDir" value="/home/pretzel/docs/projects" />
+<project name="hiveshareWebApp" default="dist" basedir="." xmlns:artifact="urn:maven-artifact-ant">
+  <property name="projectsDir" value="c:\development" />
   <property name="jabsorbDir" value="${projectsDir}/jabsorb-trunk-unchanged" />
   <property name="libs" value="WebContent/WEB-INF/lib" />
   <property name="jsSrc" value="js_src" />
@@ -12,13 +12,51 @@
 	<property name="build" value="build" />
 	<property name="build.classes" value="${build}/classes" />
 	<property name="jsoak-app-jar" value="build/jsoak.jar" />
+	<property name="lib-ext" value="lib-ext" />
   <path id="classpath" description="This is used for building the jar">
-    <fileset dir="${jabsorbDir}/lib-ext">
+    <fileset dir="${lib-ext}">
       <include name="*.jar" />
     </fileset>
     <pathelement path="${jabsorbDir}/build/jabsorb-trunk.jar" />
   </path>
 	
+	<target name="init">
+    <taskdef
+      resource="org/apache/maven/artifact/ant/antlib.xml"
+      uri="urn:maven-artifact-ant"
+      classpath="lib-ant/maven-ant-tasks-2.0.7.jar"/>
+	</target>
+
+	<target name="setup-dependencies" depends="init" >
+	  <path id="maven-ant-tasks.classpath" path="lib-ant/maven-ant-tasks-2.0.7.jar" />
+	  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+	      uri="urn:maven-artifact-ant" classpathref="maven-ant-tasks.classpath" />
+	  <artifact:pom id="maven.project" file="pom.xml" />
+	</target>
+	  
+	<target name="check-dependencies" 
+		      depends="init"
+	        description="Check if the dependencies present in ${lib-ext}">
+	  <!-- In order to re-generate the ${lib-ext} directory, delete the {lib-ext}/dependencies file -->
+	  <available file="${lib-ext}/dependencies" type="file" property="dependencies.present"/>
+	</target>
+	  
+	<target name="copy-dependencies" 
+	        unless="dependencies.present"
+	        description="Download and copy test dependencies to the ${lib-ext} directory (only once)"
+		depends="init,setup-dependencies,check-dependencies" >
+    <artifact:dependencies filesetId="dependencies.fileset" pathId="dependencies.path">
+      <pom refid="maven.project"/>
+    </artifact:dependencies>
+    <!-- <delete dir="${lib-ext}" includes="*"/> -->
+    <copy todir="${lib-ext}" flatten="true">
+      <fileset refid="dependencies.fileset"/>
+    </copy>
+    <pathconvert refid="dependencies.path"  property="dependencies.string"/>
+    <echo file="${lib-ext}/dependencies"> ${dependencies.string} </echo>
+  </target>
+	        
+	    
 	<target name="copyFiles" description="Copies required libraries">
 		<!-- Build and copy jabsorb over -->
 		<ant antfile="${jabsorbDir}/build.xml" dir="${jabsorbDir}" target="dist" />
@@ -40,7 +78,7 @@
 		<copy file="${jsSrc}/onloadHandler.js" todir="${jsLibs}" overwrite="true" />
 	</target>
   
-	<target name="compile" description="Compiles the source into the build directory">
+	<target name="compile" depends="copy-dependencies" description="Compiles the source into the build directory">
     <mkdir dir="${build.classes}"/>
     <javac debug="true" source="5" srcdir="${src}" destdir="${build.classes}">
       <classpath refid="classpath" />
@@ -67,7 +105,9 @@
 	  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
 	     <fileset dir="${jsTestLibs}" />
 	  </delete>
-	
+		<delete includeEmptyDirs="true" quiet="false" failonerror="false">
+		   <fileset dir="${lib-ext}" />
+		</delete>
     <delete file="${jsLibs}/console.js" />
 	  <delete file="${jsLibs}/jabsorb.js" />
 	  <delete file="${jsLibs}/jsUnitCore.js" />
