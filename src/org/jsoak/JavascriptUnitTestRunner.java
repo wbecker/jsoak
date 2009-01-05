@@ -119,11 +119,11 @@ public class JavascriptUnitTestRunner
       final String[] browserList)
   {
     final Collection<BrowserRunner> browserRunners = new ArrayList<BrowserRunner>();
-    for (String browserExecutable : browserList)
+    for (String browser : browserList)
     {
-      browserRunners.add(new BrowserRunner(browserExecutable,
-          "http://localhost:8011/TESTER_SERVLET?id=" + browserExecutable,
-          this.testManager.getTestAggregator(browserExecutable + "0"),
+      browserRunners.add(new BrowserRunner(this.properties.getBrowserExecutable(browser),
+          "http://localhost:8011/TESTER_SERVLET?id=" + browser,
+          this.testManager.getTestAggregator(browser + "0"),
           //              5));
           this.testFileManager));
     }
