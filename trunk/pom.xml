@@ -80,5 +80,23 @@
       <artifactId>js</artifactId>
       <version>1.7R1</version>
     </dependency>
+    
+    <dependency>
+      <!-- Replacement for commons-logging required by httpclient -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl104-over-slf4j</artifactId>
+      <version>1.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 	</dependencies>
 </project>
