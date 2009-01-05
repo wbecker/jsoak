@@ -1,41 +1,48 @@
 package org.jsoak;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.junit.Test;
 import junit.framework.TestResult;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-public class JavascriptJunit implements junit.framework.Test
+@RunWith(Parameterized.class)
+public class JavascriptJunit
 {
+  private final RunTests testResult;
 
-    JavascriptUnitTestRunner runner;
-
-  public JavascriptJunit() throws Exception
+  public JavascriptJunit(RunTests testResult) throws Exception
   {
-    this.runner = new JavascriptUnitTestRunner();
+    this.testResult = testResult;
   }
 
-  @Override
-  public int countTestCases()
+  @Test
+  public void runJavascriptTest()
   {
-
-    return 0;
+    Assert.assertTrue(testResult.getName() + " failed. Reason: "
+        + testResult.getMessage() + " Environment: "
+        + testResult.getEnvironment(), testResult.isPassed());
   }
 
-  @Override
-  public void run(TestResult testResult)
+  @Parameters
+  public static Collection<Object[]> data()
   {
+    Collection<Object[]> data = new ArrayList<Object[]>();
     try
     {
       TestResult all = new TestResult();
-      List<TestResult> results = this.runner.runTests();
-      for (TestResult r : results)
+      JavascriptUnitTestRunner runner = new JavascriptUnitTestRunner();
+      Collection<Collection<RunTests>> results = runner.runTests();
+      for (Collection<RunTests> r : results)
       {
-        for (Object o : new EnumerationIterator(r.failures()))
+        for (RunTests t : r)
         {
-          System.out.println(o.getClass());
-          testResult.addFailure(null, null);
+          data.add(new Object[] { t });
         }
       }
     }
@@ -43,5 +50,7 @@ public class JavascriptJunit implements junit.framework.Test
     {
       e.printStackTrace();
     }
+    return data;
   }
+
 }

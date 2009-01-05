@@ -1,5 +1,7 @@
 package org.jsoak;
 
+import java.util.Collection;
+
 import junit.framework.Test;
 import junit.framework.TestResult;
 
@@ -71,4 +73,9 @@ public class BrowserRunner implements Test
     }
     return finishedProperly;
   }
+  public Collection<RunTests> getRunTests()
+  {
+    return this.testAggregator.getRunTests();
+  }
 }
+
