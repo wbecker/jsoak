@@ -12,26 +12,32 @@ public class TestBrowserRunner extends JsoakServerTest
   @Test
   public void testBrowserRunnerInFirefox() throws IOException
   {
-    this.runBrowserRunnerIn("firefox");
+    this.runBrowserRunnerIn("firefox", "C:/Program Files/Mozilla Firefox/firefox.exe");
   }
 
+//  @Test
+//  public void testBrowserRunnerInKonqueror() throws IOException
+//  {
+//    this.runBrowserRunnerIn("konqueror");
+//  }
+  
   @Test
   public void testBrowserRunnerInKonqueror() throws IOException
   {
-    this.runBrowserRunnerIn("konqueror");
+    this.runBrowserRunnerIn("iexplorer", "C:/Program Files/Internet Explorer/iexplore.exe");
   }
   
-  private void runBrowserRunnerIn(String browserName)throws IOException
+  private void runBrowserRunnerIn(String browserName, String browserExecutable)
+      throws IOException
   {
     TestAggregator ta = getRunner().getTestManager().getTestAggregator(
-        browserName+"0");
-    BrowserRunner b = new BrowserRunner(browserName,
-        "http://localhost:8011/TESTER_SERVLET?id="+browserName, ta,
+        browserName + "0");
+    BrowserRunner b = new BrowserRunner(browserExecutable,
+        "http://localhost:8011/TESTER_SERVLET?id=" + browserName, ta,
         new TestFileManager(getRunner().getProperties()));
     TestResult testResult = new TestResult();
     b.run(testResult);
     Assert.assertEquals(4, ta.getTestsRun());
   }
 
-  
 }
