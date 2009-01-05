@@ -89,8 +89,8 @@
     <jar destfile="${jsoak-app-jar}" basedir="${build.classes}" excludes="*~" />
   </target>
 	
-	<target name="run" depends="copyFiles,compile" description="Runs jsoak">
-		<java classname="org.jsoak.JsoakRunner" fork="true" failonerror="true">
+	<target name="run" depends="copyFiles, compile" description="Runs jsoak">
+		<java classname="org.jsoak.JavascriptUnitTestRunner" fork="true" failonerror="true">
 			<arg value="${port-number}" />
 			<jvmarg value="-Djava.util.logging.config.file=testlogging.properties" />
 			<classpath>
