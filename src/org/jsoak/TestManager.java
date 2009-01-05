@@ -41,7 +41,7 @@ public class TestManager
     }
     else
     {
-      toReturn = new TestAggregator();
+      toReturn = new TestAggregator(id);
       testAggregators.put(id, toReturn);
     }
     return toReturn;

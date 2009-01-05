@@ -23,13 +23,18 @@ public class JsoakServer
   /**
    * Creates a new webserver and starts it
    * 
-   * @param port The port the server runs on
+   * @param port
+   *          The port the server runs on
    */
-  public JsoakServer(int port, Servlet servlet) throws Exception
+  public JsoakServer(int port, Servlet servlet)
   {
     this.port = port;
     this.server = new Server(port);
     initialiseServer(servlet);
+  }
+
+  public void start() throws Exception
+  {
     this.server.start();
   }
 
@@ -77,7 +82,8 @@ public class JsoakServer
   /**
    * Stops the server
    * 
-   * @throws Exception if jetty has issues stopping
+   * @throws Exception
+   *           if jetty has issues stopping
    */
   public void stop()
   {
@@ -87,7 +93,7 @@ public class JsoakServer
     }
     catch (Exception e)
     {
-      //I don't think we care if it can't stop properly?
+      // I don't think we care if it can't stop properly?
     }
   }
 

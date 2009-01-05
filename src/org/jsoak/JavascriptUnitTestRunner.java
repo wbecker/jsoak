@@ -1,6 +1,5 @@
 package org.jsoak;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,36 +33,48 @@ public class JavascriptUnitTestRunner
 
   private final TestManager testManager;
 
-  private JsoakProperties properties;
+  private final JsoakProperties properties;
 
   private final TestFileManager testFileManager;
 
-  public JavascriptUnitTestRunner() throws IOException
+  private final JsoakServer server;
+
+  public JavascriptUnitTestRunner() throws Exception
   {
     this(JsoakProperties.loadProperties());
   }
 
   public JavascriptUnitTestRunner(final JsoakProperties properties)
-      throws IOException
+      throws Exception
   {
     this.properties = properties;
     this.testFileManager = new TestFileManager(properties);
     this.testManager = new TestManager(this.testFileManager);
+    this.server = this.getServer();
   }
 
-  public List<TestResult> runTests() throws Exception
+  public Collection<Collection<RunTests>> runTests() throws Exception
   {
-    final JsoakServer server = getServer();
-    List<TestResult> results = testBrowsers();
-    server.stop();
+    this.startServer();
+    Collection<Collection<RunTests>> results = testBrowsers();
+    this.stopServer();
     return results;
   }
 
-  JsoakServer getServer() throws Exception
+  public void startServer() throws Exception
+  {
+    this.server.start();
+  }
+
+  public void stopServer()
+  {
+    this.server.stop();
+  }
+
+  public JsoakServer getServer() throws Exception
   {
     final String[] testFiles = this.properties.getAllNecessaryIncludes();
-    final JsoakServer server = createServer(testFiles);
-    return server;
+    return createServer(testFiles);
   }
 
   private JsoakServer createServer(final String[] files) throws Exception
@@ -73,7 +84,8 @@ public class JavascriptUnitTestRunner
 
   private Servlet createTesterServlet(final String[] files)
   {
-    return new TesterServlet() {
+    return new TesterServlet()
+    {
       private static final long serialVersionUID = 1L;
 
       @Override
@@ -81,7 +93,8 @@ public class JavascriptUnitTestRunner
           ServletData servletData) throws java.io.IOException, ServletException
       {
         return new TesterPageServicer(servletData, files, testManager
-            .getTestAggregatorIdGenerator()) {
+            .getTestAggregatorIdGenerator())
+        {
           @Override
           protected JSONRPCBridge createNewBridge()
           {
@@ -96,14 +109,14 @@ public class JavascriptUnitTestRunner
     };
   }
 
-  private List<TestResult> testBrowsers()
+  private Collection<Collection<RunTests>> testBrowsers()
   {
-    final List<TestResult> results = new ArrayList<TestResult>();
+    final Collection<Collection<RunTests>> results = new ArrayList<Collection<RunTests>>();
     for (BrowserRunner browser : getBrowserRunners())
     {
       TestResult testResult = new TestResult();
       browser.run(testResult);
-      results.add(testResult);
+      results.add(browser.getRunTests());
     }
     return results;
   }
@@ -121,10 +134,11 @@ public class JavascriptUnitTestRunner
     final Collection<BrowserRunner> browserRunners = new ArrayList<BrowserRunner>();
     for (String browser : browserList)
     {
-      browserRunners.add(new BrowserRunner(this.properties.getBrowserExecutable(browser),
+      browserRunners.add(new BrowserRunner(this.properties
+          .getBrowserExecutable(browser),
           "http://localhost:8011/TESTER_SERVLET?id=" + browser,
           this.testManager.getTestAggregator(browser + "0"),
-          //              5));
+          // 5));
           this.testFileManager));
     }
     return browserRunners;
