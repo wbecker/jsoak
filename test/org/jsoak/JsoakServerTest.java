@@ -11,13 +11,13 @@ public abstract class JsoakServerTest extends JsoakRunnerTest
   public void setUp() throws Exception
   {
     super.setUp();
-    this.server = this.getRunner().getServer();
+    this.getRunner().startServer();
   }
 
   @After
   public void tearDown() throws Exception
   {
-    this.server.stop();
+    this.getRunner().stopServer();
     super.tearDown();
   }
   
