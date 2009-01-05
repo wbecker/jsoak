@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="hiveshareWebApp" default="copyFiles" basedir=".">
-
-	<property name="projectsDir" value="/home/pretzel/docs/projects" />
-	<property name="jabsorbDir" value="${projectsDir}/jabsorb-trunk-unchanged" />
-	<property name="libs" value="WebContent/WEB-INF/lib" />
-	<property name="jsSrc" value="js_src" />
-	<property name="jsTests" value="js_tests" />
-	<property name="jsLibs" value="WebContent" />
-	<property name="jsTestLibs" value="WebContent/js_tests" />
-	<property name="portNumber" value="8011" />
+  <property name="projectsDir" value="/home/pretzel/docs/projects" />
+  <property name="jabsorbDir" value="${projectsDir}/jabsorb-trunk-unchanged" />
+  <property name="libs" value="WebContent/WEB-INF/lib" />
+  <property name="jsSrc" value="js_src" />
+  <property name="jsTests" value="js_tests" />
+  <property name="jsLibs" value="WebContent" />
+  <property name="jsTestLibs" value="WebContent/js_tests" />
+  <property name="portNumber" value="8011" />
   <property name="src" value="src" />
 	<property name="build" value="build" />
 	<property name="build.classes" value="${build}/classes" />
@@ -65,22 +64,22 @@
 	</target>
 
 	<target name="clean" description="Cleans all files produced by ant">
-		  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
-		     <fileset dir="${jsTestLibs}" />
-		  </delete>
-		
-	    <delete file="${jsLibs}/console.js" />
-		  <delete file="${jsLibs}/jabsorb.js" />
-		  <delete file="${jsLibs}/jsUnitCore.js" />
-      <delete file="${jsLibs}/JsUnitUtil.js" />
-      <delete file="${jsLibs}/JsUnitTest.js" />
-      <delete file="${jsLibs}/Jsoak.js" />
-      <delete file="${jsLibs}/onloadHandler.js" />
+	  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
+	     <fileset dir="${jsTestLibs}" />
+	  </delete>
+	
+    <delete file="${jsLibs}/console.js" />
+	  <delete file="${jsLibs}/jabsorb.js" />
+	  <delete file="${jsLibs}/jsUnitCore.js" />
+	  <delete file="${jsLibs}/JsUnitUtil.js" />
+	  <delete file="${jsLibs}/JsUnitTest.js" />
+	  <delete file="${jsLibs}/Jsoak.js" />
+	  <delete file="${jsLibs}/onloadHandler.js" />
 
-      <delete includeEmptyDirs="true" quiet="false" failonerror="false">
-	      <fileset dir="${build}" />
-	    </delete>
-	    
-	    <echo message="Done with clean!" />
-	  </target>
+	  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
+      <fileset dir="${build}" />
+    </delete>
+    
+    <echo message="Done with clean!" />
+  </target>
 </project>
