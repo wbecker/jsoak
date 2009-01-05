@@ -5,15 +5,21 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jabsorb-trunk-unchanged"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/jetty-6.1.6.jar"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/jetty-util-6.1.6.jar"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/jsp-2.1-6.1.6.jar"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/jsp-api-2.1-6.1.6.jar"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/junit-3.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/servlet-api-2.5-6.1.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/home/pretzel/docs/projects/jabsorb-trunk-unchanged/lib-ext/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="/usr/share/rhino-1.5/lib/js.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib-ext/ant-1.6.5.jar"/>
+	<classpathentry kind="lib" path="lib-ext/core-3.1.1.jar"/>
+	<classpathentry kind="lib" path="lib-ext/jetty-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib-ext/jetty-util-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib-ext/js-1.7R1.jar"/>
+	<classpathentry kind="lib" path="lib-ext/jsp-2.1-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib-ext/jsp-api-2.1-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib-ext/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib-ext/servlet-api-2.5-6.1.6.jar"/>
+	<classpathentry kind="lib" path="lib-ext/slf4j-api-1.5.0.jar"/>
+	<classpathentry kind="lib" path="lib-ext/slf4j-jdk14-1.5.0.jar"/>
+	<classpathentry kind="lib" path="lib-ext/commons-codec-1.2.jar"/>
+	<classpathentry kind="lib" path="lib-ext/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="lib-ext/jcl104-over-slf4j-1.5.0.jar"/>
 	<classpathentry kind="output" path="eclipse_build/classes"/>
 </classpath>
