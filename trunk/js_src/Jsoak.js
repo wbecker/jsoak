@@ -89,7 +89,7 @@ var JsoakClass=function()
     }
     catch(e)
     {
-      prv.bridge.counter.addFailure(methodName, e.jsUnitMessage,function(){}); 
+      prv.bridge.counter.addFailure(methodName, e.comment+" - "+e.jsUnitMessage,function(){}); 
       console.log(methodName+" failed. Reason1: "+ e.jsUnitMessage);
       console.log(e)
     }   
