@@ -67,7 +67,7 @@ public class JsoakProperties extends Properties
     }
     else
     {
-      throw new FileNotFoundException("Test directory does not exist");
+      throw new FileNotFoundException("Test directory does not exist: "+testDirectory.getAbsolutePath());
     }
   }
 
