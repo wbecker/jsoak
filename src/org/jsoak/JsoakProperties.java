@@ -3,7 +3,6 @@ package org.jsoak;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,7 @@ public class JsoakProperties extends Properties
   public String[] getAllNecessaryAbsoluteIncludes()
       throws FileNotFoundException
   {
-    return JsoakProperties.prependDirectory(this.getAllNecessaryIncludes(), 
+    return TestFilesLoader.prependDirectory(this.getAllNecessaryIncludes(),
         this.getProperty(WEB_DIRECTORY));
   }
 
@@ -32,59 +31,29 @@ public class JsoakProperties extends Properties
   {
     final List<String> allNecessaryFileNames = new ArrayList<String>();
     loadNecessaryFiles(allNecessaryFileNames);
-    loadTestFiles(allNecessaryFileNames);
-    return allNecessaryFileNames.toArray(new String[] {});
+    allNecessaryFileNames.addAll(Arrays.asList(getAllTestFiles()));
+    return allNecessaryFileNames.toArray(new String[]{});
   }
-  
-  public String[] getAllTestFiles() throws FileNotFoundException {
-    final List<String> testFileNames = new ArrayList<String>();
-    this.loadTestFiles(testFileNames);
-    return testFileNames.toArray(new String[] {});
+
+  public String[] getAllTestFiles() throws FileNotFoundException
+  {
+    TestFilesLoader loader = new TestFilesLoader(    this.getProperty(WEB_DIRECTORY)
+        + File.separator + this.getProperty(TEST_DIRECTORY));
+    return loader.getFiles().toArray(new String[] {});
   }
 
   private void loadNecessaryFiles(final List<String> testFileNames)
   {
-    final String[] necessaryFiles = this.getProperty(NECESSARY_FILES).split(" ");;
+    final String[] necessaryFiles = this.getProperty(NECESSARY_FILES)
+        .split(" ");
     testFileNames.addAll(Arrays.asList(necessaryFiles));
-  }
-
-  private void loadTestFiles(final List<String> testFileNames)
-      throws FileNotFoundException
-  {
-    final String testDirectoryName = this.getProperty(TEST_DIRECTORY);
-    final File testDirectory = new File(testDirectoryName);
-    if (testDirectory.exists() && testDirectory.isDirectory())
-    {
-      final String[] testFiles = testDirectory.list(new FilenameFilter() {
-        @Override
-        public boolean accept(File dir, String name)
-        {
-          return name.endsWith(".js");
-        }
-      });
-      JsoakProperties.prependDirectory(testFiles, testDirectoryName);
-      testFileNames.addAll(Arrays.asList(testFiles));
-    }
-    else
-    {
-      throw new FileNotFoundException("Test directory does not exist: "+testDirectory.getAbsolutePath());
-    }
-  }
-
-  private static String[] prependDirectory(final String[] necessaryFiles,
-      String prefix)
-  {
-    for (int i = 0; i < necessaryFiles.length; i++)
-    {
-      necessaryFiles[i] = prefix + "/" + necessaryFiles[i];
-    }
-    return necessaryFiles;
   }
 
   public String[] getBrowsers()
   {
     return this.getProperty(BROWSERS).split(" ");
   }
+
   public String getBrowserExecutable(String browser)
   {
     return this.getProperty(browser);
