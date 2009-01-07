@@ -156,7 +156,6 @@ public class TestFilesLoader
     final List<String> directoryFileNames = new ArrayList<String>();
     for (final File d : directories)
     {
-      System.out.println("adding from " + d.getAbsolutePath());
       TestFilesLoader.addAll(directoryFileNames, d);
     }
     TestFilesLoader.prependDirectory(directoryFileNames, testDirectory
