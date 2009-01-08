@@ -23,13 +23,17 @@ public class BrowserRunner implements Test
 
   private final TestAggregator testAggregator;
 
+  private final boolean killBrowser;
+
   public BrowserRunner(String browserExecutable, String url,
-      TestAggregator testAggregator, TestFileManager testFileManager)
+      TestAggregator testAggregator, TestFileManager testFileManager,
+      boolean killBrowser)
   {
     this.browserExecutable = browserExecutable;
     this.url = url;
     this.testAggregator = testAggregator;
     this.testFileManager = testFileManager;
+    this.killBrowser = killBrowser;
   }
 
   @Override
@@ -41,7 +45,10 @@ public class BrowserRunner implements Test
       Process p = Runtime.getRuntime().exec(
           new String[] { this.browserExecutable, this.url });
       waitForProcessToFinish();
-      p.destroy();
+      if (killBrowser)
+      {
+        p.destroy();
+      }
     }
     catch (Exception e)
     {
@@ -73,9 +80,9 @@ public class BrowserRunner implements Test
     }
     return finishedProperly;
   }
+
   public Collection<RunTests> getRunTests()
   {
     return this.testAggregator.getRunTests();
   }
 }
-
