@@ -6,23 +6,46 @@ catch(e){
     if(!window){}
     if(!window.console)
     {
+      document.getElementById("logging").style.display="block";
       var addPara = function(message)
       {
         var para = document.createElement("p");
-        var messageNode = document.createTextNode(message);
-        para.appendChild(messageNode);
+        if(message)
+        {
+	        addToPara(para,message);
+        }
         var loggingDiv = document.getElementById("logging");
         if(loggingDiv!==null){
           loggingDiv.appendChild(para);
+          return para;
         }
         else{
           alert(message);
         }
-      }
+      };
+      var addToPara = function(p,message) 
+      {
+    	var messageNode = document.createTextNode(message);
+ 	    p.appendChild(messageNode);
+ 	    p.appendChild(document.createElement("br"));
+      };
       addPara("no console defined");
       window.console={};
-      console.log=function(message){
-        addPara(message);
+      console.log=function(){
+    	var i, arg, message;
+    	for (i = 0; i < arguments.length; i++) 
+    	{
+          arg = arguments[i];
+          p=addPara();
+          if(typeof(arg)==='object'){
+            var o;
+            for(o in arg){
+              addToPara(p,o+": "+arg[o]);
+            }
+          }
+          addToPara(p,arg);	
+    	  
+    	}
       }
     }
   }
