@@ -138,8 +138,7 @@ public class JavascriptUnitTestRunner
           .getBrowserExecutable(browser),
           "http://localhost:8011/TESTER_SERVLET?id=" + browser,
           this.testManager.getTestAggregator(browser + "0"),
-          // 5));
-          this.testFileManager));
+          this.testFileManager, this.properties.killBrowser()));
     }
     return browserRunners;
   }

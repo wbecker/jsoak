@@ -69,7 +69,12 @@ var JsoakClass=function()
     {
       if(prv.isMethodATest(test, methodName))
       {
-        prv.performTest(test[methodName], methodName);
+    	try {
+          prv.performTest(test[methodName], methodName);
+    	} 
+    	catch (ex) {
+          console.log(ex);
+    	}
       }
     }
     test[prv.teardownString]();

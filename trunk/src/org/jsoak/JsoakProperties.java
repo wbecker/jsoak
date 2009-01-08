@@ -10,6 +10,30 @@ import java.util.Properties;
 
 public class JsoakProperties extends Properties
 {
+  private static final String DEFAULT_PROPERTIES_LOCATION = "jsoak.properties";
+
+  public static JsoakProperties loadProperties(String propertiesFile)
+  {
+    JsoakProperties p = new JsoakProperties();
+    try
+    {
+      p.load(new FileInputStream(propertiesFile));
+    }
+    catch (Exception e)
+    {
+      if (propertiesFile != DEFAULT_PROPERTIES_LOCATION)
+      {
+        p = loadProperties();
+      }
+    }
+    return p;
+  }
+
+  public static JsoakProperties loadProperties()
+  {
+    return loadProperties(DEFAULT_PROPERTIES_LOCATION);
+  }
+
   private static final long serialVersionUID = 1L;
 
   private static final String BROWSERS = "browsers";
@@ -19,6 +43,8 @@ public class JsoakProperties extends Properties
   private static final String NECESSARY_FILES = "necessaryFiles";
 
   private static final String WEB_DIRECTORY = "webDirectory";
+  
+  private static final String KILL_BROWSER = "killBrowser";
 
   public String[] getAllNecessaryAbsoluteIncludes()
       throws FileNotFoundException
@@ -58,28 +84,9 @@ public class JsoakProperties extends Properties
   {
     return this.getProperty(browser);
   }
-
-  private static final String DEFAULT_PROPERTIES_LOCATION = "jsoak.properties";
-
-  public static JsoakProperties loadProperties(String propertiesFile)
+  
+  public boolean killBrowser() 
   {
-    JsoakProperties p = new JsoakProperties();
-    try
-    {
-      p.load(new FileInputStream(propertiesFile));
-    }
-    catch (Exception e)
-    {
-      if (propertiesFile != DEFAULT_PROPERTIES_LOCATION)
-      {
-        p = loadProperties();
-      }
-    }
-    return p;
-  }
-
-  public static JsoakProperties loadProperties()
-  {
-    return loadProperties(DEFAULT_PROPERTIES_LOCATION);
+    return Boolean.parseBoolean(this.getProperty(KILL_BROWSER));
   }
 }
