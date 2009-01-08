@@ -1,5 +1,8 @@
 package org.jsoak;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.Servlet;
 
 import org.jabsorb.JSONRPCServlet;
@@ -56,6 +59,9 @@ public class JsoakServer
     context.setContextPath(WEB_APP_BASE_DIR);
     context.setResourceBase(WEB_CONTENT_DIRECTORY);
     context.setAttribute("copyWebDir", "true");
+    Map<String,String> initParams=new HashMap<String, String>();
+    initParams.put("cacheControl", "no-cache");
+    context.setInitParams(initParams);
     return context;
   }
 
