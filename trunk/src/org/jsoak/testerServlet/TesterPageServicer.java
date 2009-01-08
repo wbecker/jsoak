@@ -134,7 +134,7 @@ public abstract class TesterPageServicer
     w.w("<title>jsoak</title>");
     w.w("</head>");
     w.w("<body>");
-    w.w("<div id='logging'>");
+    w.w("<div id='logging' style='display:none;height:400px;overflow:auto;width:800px;'>");
     w.w("</div>");
   }
 
