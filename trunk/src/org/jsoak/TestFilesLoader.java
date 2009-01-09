@@ -34,8 +34,8 @@ public class TestFilesLoader
   {
     if (testDirectory.exists() && testDirectory.isDirectory())
     {
-      TestFilesLoader.recurseDirectories(testFileNames, testDirectory);
-      TestFilesLoader.addAllFiles(testFileNames, testDirectory);
+      TestFilesLoader.recurseDirectories(testFileNames, testDirectory, false);
+      TestFilesLoader.addAllFiles(testFileNames, testDirectory, false);
     }
     else
     {
@@ -49,8 +49,8 @@ public class TestFilesLoader
   {
     if (testDirectory.exists() && testDirectory.isDirectory())
     {
-      TestFilesLoader.addAllFiles(testFileNames, testDirectory);
-      TestFilesLoader.recurseDirectories(testFileNames, testDirectory);
+      TestFilesLoader.addAllFiles(testFileNames, testDirectory, true);
+      TestFilesLoader.recurseDirectories(testFileNames, testDirectory, true);
     }
     else
     {
@@ -60,7 +60,7 @@ public class TestFilesLoader
   }
 
   private static void addAllFiles(final List<String> testFileNames,
-      final File testDirectory) throws FileNotFoundException
+      final File testDirectory, final boolean prepend) throws FileNotFoundException
   {
     final String[] testFiles = testDirectory.list(new FilenameFilter()
     {
@@ -71,7 +71,10 @@ public class TestFilesLoader
       }
     });
     TestFilesLoader.ensureOrder(testFiles, testDirectory);
-    TestFilesLoader.prependDirectory(testFiles, testDirectory.getName());
+    if(prepend) 
+    {
+      TestFilesLoader.prependDirectory(testFiles, testDirectory.getName());
+    }
     testFileNames.addAll(Arrays.asList(testFiles));
   }
 
@@ -155,7 +158,7 @@ public class TestFilesLoader
   }
 
   private static void recurseDirectories(final List<String> testFileNames,
-      final File testDirectory) throws FileNotFoundException
+      final File testDirectory, final boolean prepend) throws FileNotFoundException
   {
     final File[] directories = testDirectory.listFiles(new FileFilter()
     {
@@ -173,8 +176,10 @@ public class TestFilesLoader
     {
       TestFilesLoader.addAll(directoryFileNames, d);
     }
-    TestFilesLoader.prependDirectory(directoryFileNames, testDirectory
-        .getName());
+    if(prepend) {
+      TestFilesLoader.prependDirectory(directoryFileNames, testDirectory
+          .getName());
+    }
     testFileNames.addAll(directoryFileNames);
   }
 
