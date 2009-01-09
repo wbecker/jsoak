@@ -25,10 +25,25 @@ public class TestFilesLoader
   {
     final List<String> testFileNames = new ArrayList<String>();
     final File testDirectory = new File(this.testDirectoryName);
-    TestFilesLoader.addAll(testFileNames, testDirectory);
+    TestFilesLoader.addAllFirst(testFileNames, testDirectory);
     return testFileNames;
   }
-
+  
+  private static void addAllFirst(final List<String> testFileNames,
+      final File testDirectory) throws FileNotFoundException
+  {
+    if (testDirectory.exists() && testDirectory.isDirectory())
+    {
+      TestFilesLoader.recurseDirectories(testFileNames, testDirectory);
+      TestFilesLoader.addAllFiles(testFileNames, testDirectory);
+    }
+    else
+    {
+      throw new FileNotFoundException("Test directory does not exist: "
+          + testDirectory.getAbsolutePath());
+    }
+  }
+  
   private static void addAll(final List<String> testFileNames,
       final File testDirectory) throws FileNotFoundException
   {
