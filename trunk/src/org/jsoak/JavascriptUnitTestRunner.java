@@ -23,12 +23,27 @@ public class JavascriptUnitTestRunner
     {
       JavascriptUnitTestRunner jsoakRunner = new JavascriptUnitTestRunner(
           JsoakProperties.loadProperties(propertiesFile));
-      jsoakRunner.runTests();
+      Collection<Collection<RunTests>> results = jsoakRunner.runTests();
+      int returnCode = generateReturnCode(results);
+      System.exit(returnCode);
     }
     catch (Exception e)
     {
       e.printStackTrace();
     }
+  }
+
+  private static int generateReturnCode(Collection<Collection<RunTests>> results)
+  {
+    for(Collection<RunTests> rr: results) 
+    {
+      for(RunTests rt: rr) {
+        if(!rt.isPassed()) {
+          return 1;
+        }
+      }
+    }
+    return 0;
   }
 
   private final TestManager testManager;
