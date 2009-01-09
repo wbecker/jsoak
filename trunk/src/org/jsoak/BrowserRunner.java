@@ -85,4 +85,9 @@ public class BrowserRunner implements Test
   {
     return this.testAggregator.getRunTests();
   }
+
+  public String getId()
+  {
+    return this.browserExecutable;
+  }
 }

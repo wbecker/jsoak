@@ -114,9 +114,11 @@ public class JavascriptUnitTestRunner
     final Collection<Collection<RunTests>> results = new ArrayList<Collection<RunTests>>();
     for (BrowserRunner browser : getBrowserRunners())
     {
+      System.out.println("Testing: "+browser.getId());
       TestResult testResult = new TestResult();
       browser.run(testResult);
       results.add(browser.getRunTests());
+      System.out.println("Finished Tests");
     }
     return results;
   }
