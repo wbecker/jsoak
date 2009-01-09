@@ -56,23 +56,15 @@ public class JsoakProperties extends Properties
   public String[] getAllNecessaryIncludes() throws FileNotFoundException
   {
     final List<String> allNecessaryFileNames = new ArrayList<String>();
-    loadNecessaryFiles(allNecessaryFileNames);
     allNecessaryFileNames.addAll(Arrays.asList(getAllTestFiles()));
     return allNecessaryFileNames.toArray(new String[]{});
   }
 
   public String[] getAllTestFiles() throws FileNotFoundException
   {
-    TestFilesLoader loader = new TestFilesLoader(    this.getProperty(WEB_DIRECTORY)
-        + File.separator + this.getProperty(TEST_DIRECTORY));
-    return loader.getFiles().toArray(new String[] {});
-  }
-
-  private void loadNecessaryFiles(final List<String> testFileNames)
-  {
-    final String[] necessaryFiles = this.getProperty(NECESSARY_FILES)
-        .split(" ");
-    testFileNames.addAll(Arrays.asList(necessaryFiles));
+    TestFilesLoader loader = new TestFilesLoader(this.getProperty(WEB_DIRECTORY));
+    List<String> files = loader.getFiles();
+    return files.toArray(new String[] {});
   }
 
   public String[] getBrowsers()
