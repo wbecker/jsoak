@@ -1,6 +1,8 @@
 package org.jsoak.testerServlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpSession;
@@ -23,7 +25,7 @@ public abstract class TesterPageServicer
   private final String requestId;
 
   private final JSONRPCBridge bridge;
-  
+
   public TesterPageServicer(final ServletData servletData,
       String[] testFileNames,
       TestAggregatorIdGenerator testAggregatorIdGenerator) throws IOException,
@@ -80,19 +82,19 @@ public abstract class TesterPageServicer
     final HttpSession session = pageContext.getSession();
     synchronized (session)
     {
-//      try
-//      {
-//        _bridge = this.getBridgeFromContext();
-//       }
-//      catch (BridgeNotFound e)
-//      {
+      // try
+      // {
+      // _bridge = this.getBridgeFromContext();
+      // }
+      // catch (BridgeNotFound e)
+      // {
       _bridge = createNewBridge();
-      pageContext.setAttribute("JSONRPCBridge", _bridge,
-          SCOPE);
-//      }
+      pageContext.setAttribute("JSONRPCBridge", _bridge, SCOPE);
+      // }
     }
     return _bridge;
   }
+
   private final int SCOPE = PageContext.SESSION_SCOPE;
 
   private JSONRPCBridge getBridgeFromContext() throws BridgeNotFound
@@ -141,33 +143,22 @@ public abstract class TesterPageServicer
   private void writeJavascriptIncludes(final String[] testFileNames,
       final JspWriterProxy w) throws IOException
   {
-//    includeLibraries(w);
-    includeTestFiles(w, testFileNames);
-    includeOnLoadHandler(w);
-  }
-
-  private void includeLibraries(final JspWriterProxy w) throws IOException
-  {
-    w.i("/console.js");
-    w.i("/jabsorb.js");
-    w.i("/jsUnitCore.js");
-    w.i("/Jsoak.js");
-    w.i("/JsUnitUtil.js");
-    w.i("/JsUnitTest.js");
-  }
-
-  private void includeTestFiles(final JspWriterProxy w,
-      String[] testFileNames) throws IOException
-  {
+    List<String> lastOnes = new ArrayList<String>();
     for (final String s : testFileNames)
+    {
+      if (s.contains("onloadHandler.js"))
+      {
+        lastOnes.add(s);
+      }
+      else
+      {
+        w.i(s);
+      }
+    }
+    for (final String s : lastOnes)
     {
       w.i(s);
     }
-  }
-
-  private void includeOnLoadHandler(final JspWriterProxy w) throws IOException
-  {
-    w.i("/onloadHandler.js");
   }
 
   private void writeHtmlBody(final JspWriterProxy w) throws IOException
