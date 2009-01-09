@@ -31,7 +31,7 @@ catch(e){
       };
       addPara("no console defined");
       window.console={};
-      console.log=function(){
+      window.console.log=function(){
     	var i, arg, message;
     	for (i = 0; i < arguments.length; i++) 
     	{
