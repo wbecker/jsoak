@@ -94,7 +94,23 @@ var JsoakClass=function()
     }
     catch(e)
     {
-      prv.bridge.counter.addFailure(methodName, e.comment+" - "+e.jsUnitMessage,function(){}); 
+      var errorMessage;
+      if(e.jsUnitMessage) {
+    	errorMessage = e.comment+" - "+e.jsUnitMessage;
+      } 
+      else {
+    	if(e.fileName && e.lineNumber) {
+    	  errorMessage = "[" + e.fileName + "@" + e.lineNumber + "] ";
+    	}
+    	else if(e.fileName) {
+      	  errorMessage = "[" + e.fileName + "] ";
+      	}
+    	else if(e.lineNumber) {
+      	  errorMessage = "[ line: " + e.lineNumber + "] ";
+      	}
+    	errorMessage = errorMessage + e.name+": "+e.message;
+      }
+      prv.bridge.counter.addFailure(methodName, errorMessage, function(){});
       console.log(methodName+" failed. Reason1: "+ e.jsUnitMessage);
       console.log(e)
     }   
