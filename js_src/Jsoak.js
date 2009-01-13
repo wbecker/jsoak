@@ -59,25 +59,55 @@ var JsoakClass=function()
     var i;
     for(i=0;i<prv.tests.length;i++)
     {
-      prv.doTestSuite(prv.tests[i])
+      try
+      {
+        prv.doTestSuite(prv.tests[i])
+      }
+      catch (ex) 
+      {
+        prv.bridge.counter.addFailure("error in test suite: "+ex.testSuiteName, ex.message, function(){});
+        console.log("Test suite failed. Reason: "+ ex.message);
+        console.log(ex);  
+      }
+      
     }
   };
   prv.doTestSuite = function (test) {
     var methodName;
-    test[prv.setupString]();
+    try
+    {
+      test[prv.setupString]();
+    }
+    catch(ex) 
+    {
+      ex.message = "Exception in test setup: "+ex.message;
+      ex.testSuiteName = test.testSuiteName;
+      throw ex;
+    }
     for(methodName in test)
     {
       if(prv.isMethodATest(test, methodName))
       {
-    	try {
+  	    try 
+  	    {
           prv.performTest(test[methodName], methodName);
-    	} 
-    	catch (ex) {
+  	    } 
+    	  catch (ex) 
+    	  {
           console.log(ex);
-    	}
+    	  }
       }
     }
-    test[prv.teardownString]();
+    try
+    {
+      test[prv.teardownString]();
+    }
+    catch(ex) 
+    {
+      ex.message = "Exception in test teardown: "+ex.message;
+      ex.testSuiteName = test.testSuiteName;
+      throw ex;
+    }
   };
   
   prv.isMethodATest = function (test, methodName) {
