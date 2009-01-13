@@ -90,7 +90,7 @@ var JsoakClass=function()
       {
   	    try 
   	    {
-          prv.performTest(test[methodName], methodName);
+          prv.performTest(test.testSuiteName, test[methodName], methodName);
   	    } 
     	  catch (ex) 
     	  {
@@ -115,11 +115,11 @@ var JsoakClass=function()
            && (typeof test[methodName] === "function");
   };
   
-  prv.performTest = function (test, methodName) {
+  prv.performTest = function (testSuiteName, test, methodName) {
     try
     {
       test();
-      prv.bridge.counter.addSuccess(methodName, function () {});
+      prv.bridge.counter.addSuccess(testSuiteName+"."+methodName, function () {});
       console.log(methodName + " succeeded.")
     }
     catch(e)
