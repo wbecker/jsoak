@@ -61,15 +61,22 @@ var JsoakClass=function()
     {
       try
       {
-        prv.doTestSuite(prv.tests[i])
+        prv.doTestSuite(prv.tests[i]);
       }
       catch (ex) 
       {
-        prv.bridge.counter.addFailure("error in test suite: "+ex.testSuiteName, ex.message, function(){});
+        prv.bridge.counter.addFailure("Error in test suite ("+ex.fileName+"@"+ex.lineNumber+"): "+ex.testSuiteName, ex.message, function(){});
         console.log("Test suite failed. Reason: "+ ex.message);
-        console.log(ex);  
+        console.log(ex);
+        var test = prv.tests[i];
+        for(methodName in test)
+        {
+          if(prv.isMethodATest(test, methodName))
+          {
+            prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
+          }
+        }
       }
-      
     }
   };
   prv.doTestSuite = function (test) {
@@ -140,7 +147,7 @@ var JsoakClass=function()
       	}
     	errorMessage = errorMessage + e.name+": "+e.message;
       }
-      prv.bridge.counter.addFailure(methodName, errorMessage, function(){});
+      prv.bridge.counter.addFailure(testSuiteName+"."+methodName, errorMessage, function(){});
       console.log(methodName+" failed. Reason1: "+ e.jsUnitMessage);
       console.log(e)
     }   
