@@ -27,8 +27,9 @@ public abstract class TesterPageServicer
   private final JSONRPCBridge bridge;
 
   public TesterPageServicer(final ServletData servletData,
-      String[] testFileNames,
-      TestAggregatorIdGenerator testAggregatorIdGenerator) throws IOException,
+      final String[] testFileNames,
+      final String[] cssFiles,
+      final TestAggregatorIdGenerator testAggregatorIdGenerator) throws IOException,
       ServletException
   {
     this.servletData = servletData;
@@ -38,7 +39,7 @@ public abstract class TesterPageServicer
         .getId());
     this.bridge = getBridge();
 
-    createResponse(testFileNames);
+    createResponse(testFileNames, cssFiles);
   }
 
   public String getRequestId()
@@ -46,13 +47,13 @@ public abstract class TesterPageServicer
     return requestId;
   }
 
-  private void createResponse(final String[] testFileNames) throws IOException,
+  private void createResponse(final String[] testFileNames, final String[] cssFiles) throws IOException,
       ServletException
   {
     try
     {
       setResponseContentType();
-      writeTesterPage(testFileNames);
+      writeTesterPage(testFileNames, cssFiles);
     }
     catch (final Throwable t)
     {
@@ -120,24 +121,33 @@ public abstract class TesterPageServicer
     }
   }
 
-  private void writeTesterPage(final String[] testFileNames) throws IOException
+  private void writeTesterPage(final String[] testFileNames, final String[] cssFiles) throws IOException
   {
     final JspWriterProxy w = new JspWriterProxy(this.outputWriter);
 
-    writeHtmlHeader(w);
+    writeHtmlHeader(w, cssFiles);
     writeJavascriptIncludes(testFileNames, w);
     writeHtmlBody(w);
   }
 
-  private void writeHtmlHeader(final JspWriterProxy w) throws IOException
+  private void writeHtmlHeader(final JspWriterProxy w, final String[] cssFiles) throws IOException
   {
     w.w("<html>");
     w.w("<head>");
     w.w("<title>jsoak</title>");
+    writeCssIncludes(w,cssFiles);
     w.w("</head>");
     w.w("<body>");
     w.w("<div id='logging' style='display:none;height:400px;overflow:auto;width:800px;'>");
     w.w("</div>");
+  }
+
+  private void writeCssIncludes(final JspWriterProxy w, final String[] cssFiles) throws IOException
+  {
+    for (String cssFile: cssFiles) 
+    {
+      w.w("<link rel='stylesheet' href='"+cssFile+"' type='text/css' media='screen' charset='utf-8' />");
+    }
   }
 
   private void writeJavascriptIncludes(final String[] testFileNames,

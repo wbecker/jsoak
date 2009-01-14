@@ -88,15 +88,16 @@ public class JavascriptUnitTestRunner
   public JsoakServer getServer() throws Exception
   {
     final String[] testFiles = this.properties.getAllNecessaryIncludes();
-    return createServer(testFiles);
+    final String[] cssFiles = this.properties.getCssFiles();
+    return createServer(testFiles,cssFiles);
   }
 
-  private JsoakServer createServer(final String[] files) throws Exception
+  private JsoakServer createServer(final String[] testFiles, final String[] cssFiles) throws Exception
   {
-    return new JsoakServer(8011, createTesterServlet(files));
+    return new JsoakServer(8011, createTesterServlet(testFiles, cssFiles));
   }
 
-  private Servlet createTesterServlet(final String[] files)
+  private Servlet createTesterServlet(final String[] testFiles, final String[] cssFiles)
   {
     return new TesterServlet()
     {
@@ -106,7 +107,7 @@ public class JavascriptUnitTestRunner
       protected TesterPageServicer createTesterPageServicer(
           ServletData servletData) throws java.io.IOException, ServletException
       {
-        return new TesterPageServicer(servletData, files, testManager
+        return new TesterPageServicer(servletData, testFiles, cssFiles, testManager
             .getTestAggregatorIdGenerator())
         {
           @Override
