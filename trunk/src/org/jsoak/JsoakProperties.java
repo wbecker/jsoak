@@ -43,7 +43,8 @@ public class JsoakProperties extends Properties
   private static final String NECESSARY_FILES = "necessaryFiles";
 
   private static final String WEB_DIRECTORY = "webDirectory";
-  
+  private static final String CSS_DIRECTORY = "cssDirectory";
+    
   private static final String KILL_BROWSER = "killBrowser";
 
   public String[] getAllNecessaryAbsoluteIncludes()
@@ -62,8 +63,17 @@ public class JsoakProperties extends Properties
 
   public String[] getAllTestFiles() throws FileNotFoundException
   {
-    TestFilesLoader loader = new TestFilesLoader(this.getProperty(WEB_DIRECTORY));
+    TestFilesLoader loader = new TestFilesLoader(this.getProperty(WEB_DIRECTORY), ".js");
     List<String> files = loader.getFiles();
+    return files.toArray(new String[] {});
+  }
+
+  public String[] getCssFiles() throws FileNotFoundException
+  {
+    TestFilesLoader loader = new TestFilesLoader(
+        this.getProperty(WEB_DIRECTORY)+"/"+this.getProperty(CSS_DIRECTORY), ".css");
+    List<String> files = loader.getFiles();
+    TestFilesLoader.prependDirectory(files, this.getProperty(CSS_DIRECTORY));
     return files.toArray(new String[] {});
   }
 
@@ -81,4 +91,5 @@ public class JsoakProperties extends Properties
   {
     return Boolean.parseBoolean(this.getProperty(KILL_BROWSER));
   }
+
 }

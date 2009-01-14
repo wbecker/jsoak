@@ -14,28 +14,31 @@ import java.util.List;
 public class TestFilesLoader
 {
   private final String testDirectoryName;
-
-  public TestFilesLoader(final String testDirectoryName)
+  private final String fileType;
+  
+  public TestFilesLoader(final String testDirectoryName, final String fileType)
       throws FileNotFoundException
   {
+    System.out.println(testDirectoryName);
     this.testDirectoryName = testDirectoryName;
+    this.fileType = fileType;
   }
 
   public List<String> getFiles() throws FileNotFoundException
   {
     final List<String> testFileNames = new ArrayList<String>();
     final File testDirectory = new File(this.testDirectoryName);
-    TestFilesLoader.addAllFirst(testFileNames, testDirectory);
+    addAllFirst(testFileNames, testDirectory);
     return testFileNames;
   }
   
-  private static void addAllFirst(final List<String> testFileNames,
+  private void addAllFirst(final List<String> testFileNames,
       final File testDirectory) throws FileNotFoundException
   {
     if (testDirectory.exists() && testDirectory.isDirectory())
     {
-      TestFilesLoader.recurseDirectories(testFileNames, testDirectory, false);
-      TestFilesLoader.addAllFiles(testFileNames, testDirectory, false);
+      recurseDirectories(testFileNames, testDirectory, false);
+      addAllFiles(testFileNames, testDirectory, false);
     }
     else
     {
@@ -44,13 +47,13 @@ public class TestFilesLoader
     }
   }
   
-  private static void addAll(final List<String> testFileNames,
+  private void addAll(final List<String> testFileNames,
       final File testDirectory) throws FileNotFoundException
   {
     if (testDirectory.exists() && testDirectory.isDirectory())
     {
-      TestFilesLoader.addAllFiles(testFileNames, testDirectory, true);
-      TestFilesLoader.recurseDirectories(testFileNames, testDirectory, true);
+      addAllFiles(testFileNames, testDirectory, true);
+      recurseDirectories(testFileNames, testDirectory, true);
     }
     else
     {
@@ -59,7 +62,7 @@ public class TestFilesLoader
     }
   }
 
-  private static void addAllFiles(final List<String> testFileNames,
+  private void addAllFiles(final List<String> testFileNames,
       final File testDirectory, final boolean prepend) throws FileNotFoundException
   {
     final String[] testFiles = testDirectory.list(new FilenameFilter()
@@ -67,7 +70,7 @@ public class TestFilesLoader
       @Override
       public boolean accept(final File dir, final String name)
       {
-        return name.endsWith(".js");
+        return name.endsWith(fileType);
       }
     });
     TestFilesLoader.ensureOrder(testFiles, testDirectory);
@@ -157,7 +160,7 @@ public class TestFilesLoader
     }
   }
 
-  private static void recurseDirectories(final List<String> testFileNames,
+  private void recurseDirectories(final List<String> testFileNames,
       final File testDirectory, final boolean prepend) throws FileNotFoundException
   {
     final File[] directories = testDirectory.listFiles(new FileFilter()
@@ -174,7 +177,7 @@ public class TestFilesLoader
     final List<String> directoryFileNames = new ArrayList<String>();
     for (final File d : directories)
     {
-      TestFilesLoader.addAll(directoryFileNames, d);
+      addAll(directoryFileNames, d);
     }
     if(prepend) {
       TestFilesLoader.prependDirectory(directoryFileNames, testDirectory
@@ -193,7 +196,7 @@ public class TestFilesLoader
     return necessaryFiles;
   }
 
-  private static List<String> prependDirectory(
+  static List<String> prependDirectory(
       final List<String> necessaryFiles, final String prefix)
   {
     for (int i = 0; i < necessaryFiles.size(); i++)
