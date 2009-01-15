@@ -17,7 +17,7 @@ public class JsoakServer
 
   private final String TEST_SERVLET_PATH = "/TESTER_SERVLET";
 
-  private final String WEB_CONTENT_DIRECTORY = "WebContent/";
+  private final String webContentDirectory;
 
   private final Server server;
 
@@ -29,10 +29,11 @@ public class JsoakServer
    * @param port
    *          The port the server runs on
    */
-  public JsoakServer(int port, Servlet servlet)
+  public JsoakServer(int port, Servlet servlet, String webContentDirectory)
   {
     this.port = port;
     this.server = new Server(port);
+    this.webContentDirectory = webContentDirectory;
     initialiseServer(servlet);
   }
 
@@ -57,7 +58,7 @@ public class JsoakServer
     Context context = new Context(this.server, WEB_APP_BASE_DIR,
         Context.SESSIONS);
     context.setContextPath(WEB_APP_BASE_DIR);
-    context.setResourceBase(WEB_CONTENT_DIRECTORY);
+    context.setResourceBase(webContentDirectory);
     context.setAttribute("copyWebDir", "true");
     Map<String,String> initParams=new HashMap<String, String>();
     initParams.put("cacheControl", "no-cache");
