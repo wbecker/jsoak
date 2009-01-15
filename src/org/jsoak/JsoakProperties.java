@@ -38,8 +38,6 @@ public class JsoakProperties extends Properties
 
   private static final String BROWSERS = "browsers";
 
-  private static final String TEST_DIRECTORY = "testDirectory";
-
   private static final String NECESSARY_FILES = "necessaryFiles";
 
   private static final String WEB_DIRECTORY = "webDirectory";
