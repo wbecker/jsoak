@@ -5,7 +5,7 @@
   <property name="libs" value="WebContent/WEB-INF/lib" />
   <property name="jsSrc" value="js_src" />
   <property name="jsTests" value="js_tests" />
-  <property name="jsLibs" value="WebContent" />
+  <property name="serverRoot" value="WebContent" />
   <property name="jsTestLibs" value="WebContent/js_tests" />
   <property name="portNumber" value="8011" />
   <property name="src" value="src" />
@@ -65,17 +65,14 @@
 		<copy file="${jabsorbDir}/lib/slf4j-api-1.4.2.jar" todir="${libs}" overwrite="true" />
 		<copy file="${jabsorbDir}/lib/slf4j-jdk14-1.4.2.jar" todir="${libs}" overwrite="true" />
 		
-    <copy file="${jsSrc}/console.js" todir="${jsLibs}" overwrite="true" />
-    <copy file="${jabsorbDir}/webapps/jsonrpc/jabsorb.js" todir="${jsLibs}" overwrite="true" />
-		<copy file="${jsSrc}/jsUnitCore.js" todir="${jsLibs}" overwrite="true" />
-		<copy file="${jsSrc}/JsUnitUtil.js" todir="${jsLibs}" overwrite="true" />
-		<copy file="${jsSrc}/JsUnitTest.js" todir="${jsLibs}" overwrite="true" />
-		<copy file="${jsSrc}/Jsoak.js" todir="${jsLibs}" overwrite="true" />
-		
-		<copy toDir="${jsTestLibs}" >
-		  <fileset dir="${jsTests}"></fileset>
-		</copy> 
-		<copy file="${jsSrc}/onloadHandler.js" todir="${jsLibs}" overwrite="true" />
+		<copy todir="${serverRoot}/jsoak" overwrite="true" >
+      <fileset dir="${jsSrc}" includes="*.js"></fileset>
+    </copy>
+		<copy file="${jabsorbDir}/webapps/jsonrpc/jabsorb.js" todir="${serverRoot}/jabsorb" overwrite="true" />
+    <copy toDir="${jsTestLibs}" >
+        <fileset dir="${jsTests}"></fileset>
+    </copy>
+		<copy file="dirOrder.txt" todir="${serverRoot}" overwrite="true" />
 	</target>
   
 	<target name="compile" depends="copy-dependencies" description="Compiles the source into the build directory">
@@ -108,13 +105,13 @@
 		<delete includeEmptyDirs="true" quiet="false" failonerror="false">
 		   <fileset dir="${lib-ext}" />
 		</delete>
-    <delete file="${jsLibs}/console.js" />
-	  <delete file="${jsLibs}/jabsorb.js" />
-	  <delete file="${jsLibs}/jsUnitCore.js" />
-	  <delete file="${jsLibs}/JsUnitUtil.js" />
-	  <delete file="${jsLibs}/JsUnitTest.js" />
-	  <delete file="${jsLibs}/Jsoak.js" />
-	  <delete file="${jsLibs}/onloadHandler.js" />
+    <delete file="${serverRoot}/console.js" />
+	  <delete file="${serverRoot}/jabsorb.js" />
+	  <delete file="${serverRoot}/jsUnitCore.js" />
+	  <delete file="${serverRoot}/JsUnitUtil.js" />
+	  <delete file="${serverRoot}/JsUnitTest.js" />
+	  <delete file="${serverRoot}/Jsoak.js" />
+	  <delete file="${serverRoot}/onloadHandler.js" />
 
 	  <delete includeEmptyDirs="true" quiet="false" failonerror="false">
       <fileset dir="${build}" />
