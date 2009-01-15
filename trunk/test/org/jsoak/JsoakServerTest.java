@@ -11,6 +11,7 @@ public abstract class JsoakServerTest extends JsoakRunnerTest
   public void setUp() throws Exception
   {
     super.setUp();
+    server = this.getRunner().getServer();
     this.getRunner().startServer();
   }
 
