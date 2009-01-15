@@ -59,5 +59,6 @@ catch(e){
     document.getElementById=f;
     console={};
     console.log=f;
+    setTimeout = f;
   }
 }
