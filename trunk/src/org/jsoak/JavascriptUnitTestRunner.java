@@ -127,14 +127,26 @@ public class JavascriptUnitTestRunner
   private Collection<Collection<RunTests>> testBrowsers()
   {
     final Collection<Collection<RunTests>> results = new ArrayList<Collection<RunTests>>();
-    for (BrowserRunner browser : getBrowserRunners())
+    final Collection<BrowserRunner> runningBrowsers = new ArrayList<BrowserRunner>();
+    for (final BrowserRunner browser : getBrowserRunners())
     {
-      System.out.println("Testing: "+browser.getId());
+      System.out.println("Testing: "+browser.getBrowserId());
       TestResult testResult = new TestResult();
-      browser.run(testResult);
+      browser.run(testResult, new BrowserRunner.BrowserRunnerTerminatedCallback(){
+        @Override
+        public void terminated()
+        {
+          runningBrowsers.remove(browser); 
+        }
+      });
       results.add(browser.getRunTests());
-      System.out.println("Finished Tests");
+      runningBrowsers.add(browser);
     }
+    while(runningBrowsers.size() > 0) 
+    {
+      try{Thread.sleep(100);}catch(Exception e){};
+    }
+    System.out.println("Finished all tests");
     return results;
   }
 

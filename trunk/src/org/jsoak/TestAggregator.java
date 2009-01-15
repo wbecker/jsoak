@@ -27,14 +27,14 @@ public class TestAggregator
 
   public void addSuccess(String testName)
   {
-    System.out.println(testName + ": Succeedded");
+    System.out.println(environment + " - " + testName + ": Succeedded");
     this.runTests.add(new RunTests(testName, true, "Test Passed", environment));
     this.successes++;
   }
 
   public void addFailure(String testName, String reason)
   {
-    System.out.println(testName + ": Failed (" + reason + ")");
+    System.out.println(environment + " - " + testName + ": Failed (" + reason + ")");
     testResult.addFailure(new JavascriptTest(testName),
         new AssertionFailedError(reason));
     this.runTests.add(new RunTests(testName, false, reason, environment));
