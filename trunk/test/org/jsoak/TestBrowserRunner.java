@@ -34,7 +34,7 @@ public class TestBrowserRunner extends JsoakServerTest
         browserName + "0");
     BrowserRunner b = new BrowserRunner(browserExecutable,
         "http://localhost:8011/TESTER_SERVLET?id=" + browserName, ta,
-        new TestFileManager(getRunner().getProperties()));
+        new TestFileManager(getRunner().getProperties()),true);
     TestResult testResult = new TestResult();
     b.run(testResult);
     Assert.assertEquals(4, ta.getTestsRun());
