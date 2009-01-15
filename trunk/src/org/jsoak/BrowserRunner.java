@@ -5,8 +5,12 @@ import java.util.Collection;
 import junit.framework.Test;
 import junit.framework.TestResult;
 
-public class BrowserRunner implements Test
+public class BrowserRunner extends Thread implements Test
 {
+  public interface BrowserRunnerTerminatedCallback {
+    void terminated();
+  }
+  
   private final TestFileManager testFileManager;
 
   @Override
@@ -36,10 +40,21 @@ public class BrowserRunner implements Test
     this.killBrowser = killBrowser;
   }
 
-  @Override
-  public void run(TestResult testResult)
+  private BrowserRunnerTerminatedCallback callback;
+
+  public void run(TestResult testResult, BrowserRunnerTerminatedCallback callback)
   {
     this.testAggregator.setTestResult(testResult);
+    this.callback = callback;
+    this.start();
+  }
+  public void run(TestResult testResult)
+  {
+    this.run(testResult, null);
+  }
+  
+  public void run() 
+  {
     try
     {
       Process p = Runtime.getRuntime().exec(
@@ -53,6 +68,9 @@ public class BrowserRunner implements Test
     catch (Exception e)
     {
       e.printStackTrace();
+    }
+    if(callback != null) {
+      callback.terminated();
     }
   }
 
@@ -86,7 +104,7 @@ public class BrowserRunner implements Test
     return this.testAggregator.getRunTests();
   }
 
-  public String getId()
+  public String getBrowserId()
   {
     return this.browserExecutable;
   }
