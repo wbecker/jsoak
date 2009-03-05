@@ -1,3 +1,16 @@
+var makeWindow = function() {
+	window={};
+	document={};
+	var f=function(){return f};
+	f.appendChild=f;
+	document.createElement=f;
+	document.createTextNode=f;
+	document.getElementById=f;
+	console={};
+	console.log=f;
+	setTimeout = f;
+}
+
 try{
   if(!console){}
 }
@@ -25,40 +38,37 @@ catch(e){
       };
       var addToPara = function(p,message) 
       {
-    	var messageNode = document.createTextNode(message);
- 	    p.appendChild(messageNode);
- 	    p.appendChild(document.createElement("br"));
-      };
-      addPara("no console defined");
-      window.console={};
-      window.console.log=function(){
-    	var i, arg, message;
-    	for (i = 0; i < arguments.length; i++) 
-    	{
-          arg = arguments[i];
-          p=addPara();
-          if(typeof(arg)==='object'){
-            var o;
-            for(o in arg){
-              addToPara(p,o+": "+arg[o]);
-            }
-          }
-          addToPara(p,arg);	
-    	  
-    	}
+	    	var messageNode = document.createTextNode(message);
+	 	    p.appendChild(messageNode);
+	 	    p.appendChild(document.createElement("br"));
+	      };
+	      addPara("no console defined");
+	      window.console={};
+	      window.console.log=function(){
+	    	var i, arg, message;
+	    	for (i = 0; i < arguments.length; i++) 
+	    	{
+	        arg = arguments[i];
+	        p=addPara();
+	        if(typeof(arg)==='object'){
+	          var o;
+	          for(o in arg){
+	            addToPara(p,o+": "+arg[o]);
+	          }
+	        }
+	        addToPara(p,arg);	
+	    	}
       }
     }
   }
   catch(e2){
-    window={};
-    document={};
-    var f=function(){return f};
-    f.appendChild=f;
-    document.createElement=f;
-    document.createTextNode=f;
-    document.getElementById=f;
-    console={};
-    console.log=f;
-    setTimeout = f;
+    makeWindow();
   }
+}
+try{
+	if(window);
+	if(document);
+}
+catch(e){
+	makeWindow();
 }
