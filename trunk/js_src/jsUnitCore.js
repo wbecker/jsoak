@@ -505,11 +505,12 @@ function assertHashEquals() {
  */
 function assertRoughlyEquals() {
     JsUnit._validateArguments(3, arguments);
+    var message = arguments[0];
     var expected = JsUnit._nonCommentArg(1, 3, arguments);
     var actual = JsUnit._nonCommentArg(2, 3, arguments);
     var tolerance = JsUnit._nonCommentArg(3, 3, arguments);
-    assertTrue(
-        "Expected " + expected + ", but got " + actual + " which was more than " + tolerance + " away",
+    assert(
+        message+" - Expected " + expected + ", but got " + actual + " which was more than " + tolerance + " away",
         Math.abs(expected - actual) < tolerance
     );
 }
@@ -526,7 +527,7 @@ function assertContains() {
     JsUnit._validateArguments(2, arguments);
     var value = JsUnit._nonCommentArg(1, 2, arguments);
     var collection = JsUnit._nonCommentArg(2, 2, arguments);
-    assertTrue(
+    assert(
         "Expected '" + collection + "' to contain '" + value + "'",
         collection.indexOf(value) != -1
     );
