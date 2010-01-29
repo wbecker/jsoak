@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="jsoak" default="dist" basedir="." xmlns:artifact="urn:maven-artifact-ant">
-  <property name="projectsDir" value="c:\development" />
-  <property name="jabsorbDir" value="${projectsDir}/jabsorb-trunk-unchanged" />
+  <property name="projectsDir" value=".." />
+  <property name="jabsorbDir" value="${projectsDir}/jabsorb" />
   <property name="libs" value="WebContent/WEB-INF/lib" />
   <property name="jsSrc" value="js_src" />
   <property name="jsTests" value="js_tests" />
