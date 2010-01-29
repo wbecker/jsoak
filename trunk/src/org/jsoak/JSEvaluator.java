@@ -31,6 +31,7 @@ public class JSEvaluator
   public JSEvaluator()
   {
     this.jsContext = Context.enter();
+    this.jsContext.setOptimizationLevel(-1);
     this.jsScope = jsContext.initStandardObjects();
   }
 
