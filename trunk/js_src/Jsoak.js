@@ -56,28 +56,42 @@ var JsoakClass=function()
    */
   pub.runTests=function()
   {
-    var i;
-    for(i=0;i<prv.tests.length;i++)
+	prv.lastTestFinished = -1;
+	prv.lastTestStarted = -1;
+	prv.nextTestToStart = 0
+    prv.doRunTests();
+  };
+  prv.doRunTests = function () {
+    if (prv.lastTestStarted < prv.tests.length - 1)
     {
-      try
-      {
-        prv.doTestSuite(prv.tests[i]);
-      }
-      catch (ex) 
-      {
-        prv.bridge.counter.addFailure("Error in test suite ("+ex.fileName+"@"+ex.lineNumber+"): "+ex.testSuiteName, ex.message, function(){});
-        console.log("Test suite failed. Reason: "+ ex.message);
-        console.log(ex);
-        var test = prv.tests[i];
-        for(methodName in test)
-        {
-          if(prv.isMethodATest(test, methodName))
-          {
-            prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
-          }
-        }
-      }
+	  if (prv.lastTestFinished === prv.nextTestToStart - 1) {
+		prv.runNextTestSuite(prv.nextTestToStart)
+		prv.nextTestToStart++;
+	  }
+	  ddl.setTimeout(prv.doRunTests, 100)
     }
+  }
+  prv.runNextTestSuite = function (i) { 
+	prv.lastTestStarted = i
+	try
+	{
+	  prv.doTestSuite(prv.tests[i]);
+	}
+	catch (ex) 
+	{
+	  prv.bridge.counter.addFailure("Error in test suite ("+ex.fileName+"@"+ex.lineNumber+"): "+ex.testSuiteName, ex.message, function(){});
+	  console.log("Test suite failed. Reason: "+ ex.message);
+	  console.log(ex);
+	  var test = prv.tests[i];
+	  for(methodName in test)
+	  {
+		if(prv.isMethodATest(test, methodName))
+		{
+		  prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
+		}
+	  }
+	}
+	prv.lastTestFinished = i
   };
   prv.doTestSuite = function (test) {
     var methodName;
@@ -99,10 +113,10 @@ var JsoakClass=function()
   	    {
           prv.performTest(test.testSuiteName, test[methodName], methodName);
   	    } 
-    	  catch (ex) 
-    	  {
-          console.log(ex);
-    	  }
+		catch (ex) 
+		{
+		  console.log(ex);
+		}
       }
     }
     try
