@@ -138,6 +138,14 @@ public abstract class TesterPageServicer
     writeCssIncludes(w,cssFiles);
     w.w("</head>");
     w.w("<body>");
+    w.w("<script type='text/javascript'>\n");
+    w.w("var ddl_isIE = false;");
+    w.w("</script>\n");
+    w.w("<!--[if IE]>\n");
+    w.w("<script type='text/javascript'>\n");
+    w.w("ddl_isIE = true;\n");
+    w.w("</script>\n");
+    w.w("<![endif]-->\n");
     w.w("<div id='logging' style='display:none;height:400px;overflow:auto;width:800px;'>");
     w.w("</div>");
   }
