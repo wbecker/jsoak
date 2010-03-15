@@ -138,7 +138,9 @@ public abstract class TesterPageServicer
     writeCssIncludes(w,cssFiles);
     w.w("</head>");
     w.w("<body>");
-    w.w("<script type='text/javascript'>\n");
+    w.w("<script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script>");
+	w.w("<script type='text/javascript'>\n");
+	
     w.w("var ddl_isIE = false;");
     w.w("</script>\n");
     w.w("<!--[if IE]>\n");
