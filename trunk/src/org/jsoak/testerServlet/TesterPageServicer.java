@@ -146,7 +146,7 @@ public abstract class TesterPageServicer
     w.w("ddl_isIE = true;\n");
     w.w("</script>\n");
     w.w("<![endif]-->\n");
-    w.w("<div id='logging' style='display:none;height:400px;overflow:auto;width:800px;'>");
+    w.w("<div id='logging' style='display:none;height:400px;position:absolute;overflow:auto;width:800px;'>");
     w.w("</div>");
   }
 
