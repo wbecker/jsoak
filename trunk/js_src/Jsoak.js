@@ -72,26 +72,26 @@ var JsoakClass=function()
     }
   }
   prv.runNextTestSuite = function (i) { 
-	prv.lastTestStarted = i
-	try
-	{
-	  prv.doTestSuite(prv.tests[i]);
-	}
-	catch (ex) 
-	{
-	  prv.bridge.counter.addFailure("Error in test suite ("+ex.fileName+"@"+ex.lineNumber+"): "+ex.testSuiteName, ex.message, function(){});
-	  console.log("Test suite failed. Reason: "+ ex.message);
-	  console.log(ex);
-	  var test = prv.tests[i];
-	  for(methodName in test)
-	  {
-		if(prv.isMethodATest(test, methodName))
-		{
-		  prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
-		}
-	  }
-	}
-	prv.lastTestFinished = i
+    prv.lastTestStarted = i
+    try
+    {
+      prv.doTestSuite(prv.tests[i]);
+    }
+    catch (ex) 
+    {
+      prv.bridge.counter.addFailure("Error in test suite ("+ex.fileName+"@"+ex.lineNumber+"): "+ex.testSuiteName, ex.message, function(){});
+      console.log("Test suite failed. Reason: "+ ex.message);
+      console.log(ex);
+      var test = prv.tests[i];
+      for(methodName in test)
+      {
+      if(prv.isMethodATest(test, methodName))
+      {
+        prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
+      }
+      }
+    }
+    prv.lastTestFinished = i
   };
   prv.doTestSuite = function (test) {
     var methodName;
