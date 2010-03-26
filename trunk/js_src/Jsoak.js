@@ -85,10 +85,10 @@ var JsoakClass=function()
       var test = prv.tests[i];
       for(methodName in test)
       {
-      if(prv.isMethodATest(test, methodName))
-      {
-        prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
-      }
+        if(prv.isMethodATest(test, methodName))
+        {
+          prv.bridge.counter.addFailure("Failing all tests because startup failed.","",function(){});
+        }
       }
     }
     prv.lastTestFinished = i
@@ -126,11 +126,11 @@ var JsoakClass=function()
         }
       }
     }
-    prv.finishTests(counter);
+    prv.finishTests(test, counter)();
   };
-  prv.finishTests = function (counter) {
+  prv.finishTests = function (test, counter) {
     return function () {
-      if (amountStarted === amountFinished) {
+      if (counter.amountStarted === counter.amountFinished) {
         try {
           test[prv.teardownString]();
         }
@@ -142,7 +142,7 @@ var JsoakClass=function()
         }
       }
       else {
-        ddl.setTimeout(prv.finishTests(counter), 1000)
+        ddl.setTimeout(prv.finishTests(test, counter), 1000)
       }
     };
   };
