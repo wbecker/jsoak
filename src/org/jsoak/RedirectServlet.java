@@ -25,9 +25,8 @@ public class RedirectServlet extends HttpServlet {
 		this.location = location; 
 	}
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse resp)
+	protected void service(HttpServletRequest request, HttpServletResponse resp)
 			throws ServletException, IOException {
-		super.doPost(request, resp);
 		String charset = request.getCharacterEncoding();
 		if (charset == null) {
 			charset = "UTF-8";
@@ -61,7 +60,8 @@ public class RedirectServlet extends HttpServlet {
 		BufferedOutputStream out = new BufferedOutputStream(resp
 				.getOutputStream());
 		out.write(postMethod.getResponseBodyAsString().getBytes());
-		out.close();
+		out.flush();
+    out.close();
 	}
 
 	private HttpClient client;
