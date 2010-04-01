@@ -88,7 +88,7 @@ public class JsoakServer
   {
     ServletHolder _servlet = new ServletHolder(new RedirectServlet(redirectLocation));
     _servlet.setInitParameter("auto-session-bridge", "0");
-    context.addServlet(_servlet, this.getTestServletPath());
+    context.addServlet(_servlet, REDIRECT_SERVLET_PATH);
   }
   private void configureJabsorbServlet(Context context)
   {
