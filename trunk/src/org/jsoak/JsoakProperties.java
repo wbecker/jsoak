@@ -41,6 +41,7 @@ public class JsoakProperties extends Properties
   private static final String NECESSARY_FILES = "necessaryFiles";
 
   public static final String WEB_DIRECTORY = "webDirectory";
+  public static final String REDIRECT_LOCATION = "redirectLocation";
   private static final String CSS_DIRECTORY = "cssDirectory";
     
   private static final String KILL_BROWSER = "killBrowser";
