@@ -94,7 +94,8 @@ public class JavascriptUnitTestRunner
 
   private JsoakServer createServer(final String[] testFiles, final String[] cssFiles) throws Exception
   {
-    return new JsoakServer(8011, createTesterServlet(testFiles, cssFiles), this.properties.getProperty(JsoakProperties.WEB_DIRECTORY));
+    return new JsoakServer(8011, createTesterServlet(testFiles, cssFiles), this.properties.getProperty(JsoakProperties.WEB_DIRECTORY),
+    		this.properties.getProperty(JsoakProperties.REDIRECT_LOCATION));
   }
 
   private Servlet createTesterServlet(final String[] testFiles, final String[] cssFiles)

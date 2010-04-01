@@ -16,9 +16,13 @@ public class JsoakServer
   public final String WEB_APP_BASE_DIR = "";
 
   private final String TEST_SERVLET_PATH = "/TESTER_SERVLET";
-
+  
+  private final String REDIRECT_SERVLET_PATH = "/REDIRECT_SERVLET";
+  
   private final String webContentDirectory;
 
+  private final String redirectLocation;
+  
   private final Server server;
 
   private final int port;
@@ -29,11 +33,12 @@ public class JsoakServer
    * @param port
    *          The port the server runs on
    */
-  public JsoakServer(int port, Servlet servlet, String webContentDirectory)
+  public JsoakServer(int port, Servlet servlet, String webContentDirectory, String redirectLocation)
   {
     this.port = port;
     this.server = new Server(port);
     this.webContentDirectory = webContentDirectory;
+    this.redirectLocation = redirectLocation;
     initialiseServer(servlet);
   }
 
@@ -50,6 +55,7 @@ public class JsoakServer
     Context context = createContext();
     configureDefaultServlet(context);
     configureTestServlet(servlet, context);
+    configureRedirectServlet(context);
     configureJabsorbServlet(context);
   }
 
@@ -78,7 +84,12 @@ public class JsoakServer
     _servlet.setInitParameter("auto-session-bridge", "0");
     context.addServlet(_servlet, this.getTestServletPath());
   }
-
+  private void configureRedirectServlet(Context context)
+  {
+    ServletHolder _servlet = new ServletHolder(new RedirectServlet(redirectLocation));
+    _servlet.setInitParameter("auto-session-bridge", "0");
+    context.addServlet(_servlet, this.getTestServletPath());
+  }
   private void configureJabsorbServlet(Context context)
   {
     ServletHolder _servlet = new ServletHolder(new JSONRPCServlet());
