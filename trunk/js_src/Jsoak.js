@@ -158,28 +158,31 @@ var JsoakClass=function()
         var asyncHandler_pub = {}, asyncHandler_prv = {};
         asyncHandler_prv.tests = [];
         asyncHandler_prv.timeWaited = 0;
-        asyncHandler_pub.addTest = function (timeToWait, test) {
-          asyncHandler_prv.tests.push([timeToWait, test]);
+        asyncHandler_pub.addTest = function (test) {
+          asyncHandler_prv.tests.push(test);
         };
         asyncHandler_pub.runTests = function () {
           if (asyncHandler_prv.tests.length > 0) {
-            var testObj = asyncHandler_prv.tests[0];
+            var test = asyncHandler_prv.tests[0];
             asyncHandler_prv.tests.shift();
             var timeToWait = testObj[0];
             var test = testObj[1];
-            if (timeToWait > asyncHandler_prv.timeWaited) {
-              setTimeout(asyncHandler_prv.runTest(test), timeToWait - asyncHandler_prv.timeWaited);
-              asyncHandler_prv.timeWaited = timeToWait;
-            }
-            else {
-              asyncHandler_prv.runTest(test);
-            }
+            setTimeout(asyncHandler_prv.runTest(test), 10);
           }
           else {            
             prv.bridge.counter.addSuccess(testSuiteName+"."+methodName, function () {});
             testFinished();
           }
         };
+        asyncHandler_pub.start = function () {
+          asyncHandler_prv.started = true;
+        }
+        asyncHandler_pub.started = function () {
+          return asyncHandler_prv.started;
+        }
+        asyncHandler_pub.finish = function () {
+          asyncHandler_pub.runTests();
+        }
         asyncHandler_prv.runTest = function (test) {
           return function () {
             try {
@@ -194,7 +197,10 @@ var JsoakClass=function()
         return asyncHandler_pub;
       }();
       test(asyncHandler);
-      asyncHandler.runTests();
+      if (!asyncHandler.started()) {
+         prv.bridge.counter.addSuccess(testSuiteName+"."+methodName, function () {});
+         testFinished();
+      }
     }
     catch (e)
     {
