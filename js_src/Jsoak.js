@@ -165,8 +165,6 @@ var JsoakClass=function()
           if (asyncHandler_prv.tests.length > 0) {
             var test = asyncHandler_prv.tests[0];
             asyncHandler_prv.tests.shift();
-            var timeToWait = testObj[0];
-            var test = testObj[1];
             setTimeout(asyncHandler_prv.runTest(test), 10);
           }
           else {            
